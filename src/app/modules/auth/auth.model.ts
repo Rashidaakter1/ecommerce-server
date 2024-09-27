@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { TUser } from "./auth.interface";
+import { TUser, UserModel } from "./auth.interface";
 
 const userSchema = new Schema<TUser>(
   {
@@ -10,11 +10,24 @@ const userSchema = new Schema<TUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     contactNo: { type: Number, required: true },
+    passwordChangedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
   }
 );
 
+userSchema.statics.isJWTIssuedBBeforePasswordChange = function (
+  passwordChangedAt: Date,
+  iat: number
+) {
+  const passwordChangedAtIntoNumber =
+    new Date(passwordChangedAt).getTime() / 1000;
+  console.log(passwordChangedAtIntoNumber);
+  return passwordChangedAtIntoNumber > iat;
+};
+
 // 3. Create a Model.
-export const User = model<TUser>("User", userSchema);
+export const User = model<TUser, UserModel>("User", userSchema);

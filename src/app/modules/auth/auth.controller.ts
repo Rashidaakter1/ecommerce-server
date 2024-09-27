@@ -59,10 +59,35 @@ const deleteUser = catchAsync(async (req, res) => {
   });
 });
 
+const loginUser = catchAsync(async (req, res) => {
+  const user = req.body;
+  const result = await AuthServices.loginUserIntoDb(user);
+  const { accessToken, refreshToken } = result;
+
+  // Set the token as a cookie
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 3600000,
+  });
+
+  sendResponse(res, {
+    success: true,
+    message: "User is logged in successfully",
+    statusCode: httpStatus.OK,
+    data: {
+      accessToken,
+    },
+  });
+});
+
+
 export const AuthControllers = {
   createUser,
   getUser,
   updateUser,
   deleteUser,
   getSingleUser,
+  loginUser,
 };
