@@ -81,7 +81,48 @@ const loginUser = catchAsync(async (req, res) => {
     },
   });
 });
+const refreshToken = catchAsync(async (req, res) => {
+  const { refreshToken } = req.cookies;
+  const result = await AuthServices.refreshTokenIntoDB(refreshToken);
+  sendResponse(res, {
+    success: true,
+    message: "Access token is regenerated successfully",
+    statusCode: httpStatus.OK,
+    data: result,
+  });
+});
 
+const changePassword = catchAsync(async (req, res) => {
+  const user = await AuthServices.changePasswordIntoDb(req.user, req.body);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Password is changed successfully!",
+    data: user,
+  });
+});
+
+const forgetPassword = catchAsync(async (req, res) => {
+  const userId = req.body.id;
+  const user = await AuthServices.forgetPasswordDb(userId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Forget password link is generated successfully!",
+    data: user,
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await AuthServices.resetPasswordDb(req.body, token as string);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Password is reset successfully!",
+    data: result,
+  });
+});
 
 export const AuthControllers = {
   createUser,
@@ -90,4 +131,8 @@ export const AuthControllers = {
   deleteUser,
   getSingleUser,
   loginUser,
+  refreshToken,
+  changePassword,
+  forgetPassword,
+  resetPassword,
 };

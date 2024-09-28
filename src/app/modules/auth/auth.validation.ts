@@ -38,8 +38,9 @@ const createUserValidation = z.object({
 
   isDeleted: z.boolean().default(false),
 });
+
 const loginUserValidation = z.object({
-  body: z.object({  
+  body: z.object({
     email: z.string().email({ message: "Invalid email address" }),
     password: z
       .string()
@@ -60,7 +61,39 @@ const loginUserValidation = z.object({
   }),
 });
 
+const changePasswordValidation = z.object({
+  body: z.object({
+    oldPassword: z.string({ required_error: "Old Password is required." }),
+    newPassword: z.string({ required_error: "New Password is required." }),
+  }),
+});
+
+const forgetPasswordValidation = z.object({
+  body: z.object({
+    id: z.string({ required_error: "Id  is required." }),
+  }),
+});
+
+const resetPasswordValidation = z.object({
+  body: z.object({
+    id: z.string({ required_error: "Id  is required." }),
+    newPassword: z.string({ required_error: "Forget password is required" }),
+  }),
+});
+
+const refreshTokenValidation = z.object({
+  cookies: z.object({
+    refreshToken: z.string({
+      required_error: "Refresh token is required!",
+    }),
+  }),
+});
+
 export const AuthValidations = {
   createUserValidation,
   loginUserValidation,
+  refreshTokenValidation,
+  changePasswordValidation,
+  forgetPasswordValidation,
+  resetPasswordValidation,
 };
