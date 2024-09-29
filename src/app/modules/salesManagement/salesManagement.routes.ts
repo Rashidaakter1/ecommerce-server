@@ -3,21 +3,21 @@ import express from "express";
 import validateRequest from "../../middlewares/validateRequest";
 
 import auth from "../../middlewares/auth";
-import { ProductControllers } from "./salesManagement.controller";
-import { ProductValidations } from "./salesManagement.validation";
+import { SalesManagementValidations } from "./salesManagement.validation";
+import { SalesManagementControllers } from "./salesManagement.controller";
 
 const router = express.Router();
 
 router.post(
-  "/create-product",
+  "/create",
   auth(),
-  validateRequest(ProductValidations.createProductValidation),
-  ProductControllers.createProduct
+  validateRequest(SalesManagementValidations.createSalesManagementValidation),
+  SalesManagementControllers.createSalesManagement
 );
 
-router.get("/", auth(), ProductControllers.getProduct);
-router.get("/:id", auth(), ProductControllers.getSingleProduct);
-router.put("/:id", auth(), ProductControllers.updateProduct);
-router.delete("/:id", auth(), ProductControllers.deleteProduct);
+router.get("/", auth(), SalesManagementControllers.getSalesManagement);
+router.get("/:id", auth(), SalesManagementControllers.getSingleSalesManagement);
+router.put("/:id", auth(), SalesManagementControllers.updateSalesManagement);
+router.delete("/:id", auth(), SalesManagementControllers.deleteSalesManagement);
 
-export const ProductRoutes = router;
+export const SalesManagementRoutes = router;

@@ -1,68 +1,69 @@
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { ProductServices } from "./salesManagement.service";
+import { SalesManagementServices } from "./salesManagement.service";
 
-const createProduct = catchAsync(async (req, res) => {
-  const Product = req.body;
-  console.log(Product);
-  const result = await ProductServices.createProductIntoDb(Product);
+
+const createSalesManagement = catchAsync(async (req, res) => {
+  const SalesManagement = req.body;
+  console.log(SalesManagement);
+  const result = await SalesManagementServices.createSalesManagementIntoDb(SalesManagement);
   sendResponse(res, {
     success: true,
-    message: "Product created successfully",
+    message: "SalesManagement created successfully",
     statusCode: httpStatus.OK,
     data: result,
   });
 });
 
-const getProduct = catchAsync(async (req, res) => {
-  const result = await ProductServices.getProductFromDb();
+const getSalesManagement = catchAsync(async (req, res) => {
+  const result = await SalesManagementServices.getSalesManagementFromDb();
   sendResponse(res, {
     success: true,
-    message: "Products retried successfully",
+    message: "SalesManagements retried successfully",
     statusCode: httpStatus.OK,
     data: result,
   });
 });
 
-const getSingleProduct = catchAsync(async (req, res) => {
+const getSingleSalesManagement = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await ProductServices.getSingleProductFromDb(id);
+  const result = await SalesManagementServices.getSingleSalesManagementFromDb(id);
   sendResponse(res, {
     success: true,
-    message: "Product retrieved successfully",
+    message: "SalesManagement retrieved successfully",
     statusCode: httpStatus.OK,
     data: result,
   });
 });
 
-const updateProduct = catchAsync(async (req, res) => {
+const updateSalesManagement = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const Product = req.body;
-  const result = await ProductServices.updateProductIntoDb(id, Product);
+  const SalesManagement = req.body;
+  const result = await SalesManagementServices.updateSalesManagementIntoDb(id, SalesManagement);
   sendResponse(res, {
     success: true,
-    message: "Product created successfully",
+    message: "SalesManagement created successfully",
     statusCode: httpStatus.OK,
     data: result,
   });
 });
-const deleteProduct = catchAsync(async (req, res) => {
+const deleteSalesManagement = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const Product = req.body;
-  const result = await ProductServices.deleteProductFromDb(id);
+  const SalesManagement = req.body;
+  const result = await SalesManagementServices.deleteSalesManagementFromDb(id);
   sendResponse(res, {
     success: true,
-    message: "Product id deleted successfully",
+    message: "SalesManagement id deleted successfully",
     statusCode: httpStatus.OK,
     data: result,
   });
 });
 
-export const ProductControllers = {
-  createProduct,
-  getProduct,
-  updateProduct,
-  deleteProduct,
-  getSingleProduct,
+export const SalesManagementControllers = {
+  createSalesManagement,
+  getSalesManagement,
+  updateSalesManagement,
+  deleteSalesManagement,
+  getSingleSalesManagement,
 };

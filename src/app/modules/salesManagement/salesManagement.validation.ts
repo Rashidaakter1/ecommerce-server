@@ -1,29 +1,20 @@
+import { Types } from "mongoose";
 import { z } from "zod";
 
-const createProductValidation = z.object({
+const createSalesManagementValidation = z.object({
   body: z.object({
-    name: z.string().min(3, { message: "The character must be above 3" }),
-    price: z.number().positive(),
-    quantity: z.number().int().nonnegative(),
-    brand: z.string().min(3, { message: "The character must be above 3" }),
-    model: z.string().min(3, { message: "The character must be above 3" }),
-    operatingSystem: z.enum(["ios", "android", "other"]),
-    storageCapacity: z.number().int().positive(),
-    screenSize: z.number().positive(),
-    cameraQuality: z.object({
-      main: z.number().int().positive(),
-      front: z.number().int().positive(),
+    stock: z.number().int().min(0, "Stock must be a non-negative integer"),
+    buyerDetails: z.object({
+      name: z.object({
+        firstName: z.string().min(1, "First name is required"),
+        lastName: z.string().min(1, "Last name is required"),
+      }),
     }),
-    batteryCapacity: z.number().int().positive(),
-    additionalFeatures: z.object({
-      isWaterResistant: z.boolean(),
-      has5G: z.boolean(),
-      hasWirelessCharging: z.boolean(),
-    }),
-    isDeleted: z.boolean().optional(),
+    dateOfSale: z.string(),
+    isDeleted: z.boolean(),
   }),
 });
 
-export const ProductValidations = {
-  createProductValidation,
+export const SalesManagementValidations = {
+  createSalesManagementValidation,
 };

@@ -1,14 +1,15 @@
+import { Types } from "mongoose";
+
 export type TSalesManagement = {
-  productQuantity: number;
+  product: Types.ObjectId;
+  stock: number;
   buyerDetails: {
     name: {
       firstName: string;
       lastName: string;
     };
   };
-  salesHistory:{
-    
-  }
   dateOfSale: Date;
   isDeleted: boolean;
+  salesHistory: TSalesManagement[];
 };
