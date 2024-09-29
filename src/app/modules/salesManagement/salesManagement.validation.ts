@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+
 import { z } from "zod";
 
 const createSalesManagementValidation = z.object({
@@ -11,7 +11,7 @@ const createSalesManagementValidation = z.object({
       }),
     }),
     dateOfSale: z.string(),
-    isDeleted: z.boolean(),
+    isDeleted: z.boolean().optional(),
   }),
 });
 

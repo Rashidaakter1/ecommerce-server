@@ -10,6 +10,6 @@ export type TSalesManagement = {
     };
   };
   dateOfSale: Date;
-  isDeleted: boolean;
+  isDeleted?: boolean;
   salesHistory: TSalesManagement[];
 };
