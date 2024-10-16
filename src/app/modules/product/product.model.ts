@@ -3,41 +3,90 @@ import { TProduct } from "./product.interface";
 
 const productSchema = new Schema<TProduct>(
   {
-    name: {
-      type: String,
+    id: {
+      type: Number,
       required: true,
       unique: true,
     },
-    price: { type: Number, required: true },
-    quantity: { type: Number, required: true },
-    releaseDate: { type: Date, required: true },
-    brand: { type: String, required: true },
-    model: { type: String, required: true },
-    operatingSystem: {
+    title: {
       type: String,
       required: true,
-      enum: ["ios", "android", "other"],
     },
-    storageCapacity: { type: Number, required: true },
-    screenSize: { type: Number, required: true },
-    cameraQuality: {
-      main: { type: Number, required: true },
-      front: { type: Number, required: true },
+    description: {
+      type: String,
+      required: true,
     },
-    batteryCapacity: { type: Number, required: true },
-    additionalFeatures: {
-      isWaterResistant: { type: Boolean, required: true },
-      has5G: { type: Boolean, required: true },
-      hasWirelessCharging: { type: Boolean, required: true },
+    category: {
+      type: String,
+      required: true,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
+    discountPercentage: {
+      type: Number,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
+    },
+    stock: {
+      type: Number,
+      required: true,
+    },
+    tags: {
+      type: [String],
+      required: true,
+    },
+    brand: {
+      type: String,
+      required: true,
+    },
+    sku: {
+      type: String,
+      required: true,
+    },
+    weight: {
+      type: Number,
+      required: true,
+    },
+    dimensions: {
+      width: {
+        type: Number,
+        required: true,
+      },
+      height: {
+        type: Number,
+        required: true,
+      },
+      depth: {
+        type: Number,
+        required: true,
+      },
+    },
+    warrantyInformation: {
+      type: String,
+      required: true,
+    },
+    shippingInformation: {
+      type: String,
+      required: true,
+    },
+    availabilityStatus: {
+      type: String,
+      enum: ["instock", "outofstock", "lowstock"],
+    },
+    reviews: Schema.Types.ObjectId,
     isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
   }
 );
-
-
 
 // Query Middleware
 productSchema.pre("find", function (next) {

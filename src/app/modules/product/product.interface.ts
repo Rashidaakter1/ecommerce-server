@@ -1,24 +1,37 @@
+import { Types } from "mongoose";
 
+
+// export type TReview ={
+//   rating: number;
+//   comment: string;
+//   date: Date;
+//   reviewerName: string;
+//   reviewerEmail: string;
+// }
+
+
+export type TDimensions ={
+  width: number;
+  height: number;
+  depth: number;
+}
 export type TProduct = {
-  name: string;
+  id: number;
+  title: string;
+  description: string;
+  category: string;
   price: number;
-  quantity: number;
-  releaseDate: Date;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  tags: string[];
   brand: string;
-  model: string;
-  operatingSystem: "iOS" | "Android" | "Other";
-  storageCapacity: number; // in GB
-  screenSize: number; // in inches
-  cameraQuality: {
-    main: number; // in megapixels
-    front: number; // in megapixels
-  };
-  batteryCapacity: number; // in mAh
-  additionalFeatures: {
-    isWaterResistant: boolean;
-    has5G: boolean;
-    hasWirelessCharging: boolean;
-  };
+  sku: string;
+  weight: number;
+  dimensions: TDimensions;
+  warrantyInformation: string;
+  shippingInformation: string;
+  availabilityStatus: "instock" | "outofstock" | "lowstock";
+  reviews: Types.ObjectId;
   isDeleted: boolean;
 };
-
