@@ -54,6 +54,20 @@ const createProductValidation = z.object({
       message: "Shipping Information must be at least 5 characters long",
     }),
     availabilityStatus: z.enum(["instock", "outofstock", "lowstock"]),
+    returnPolicy: z
+      .string()
+      .min(5, { message: "Return Policy must be at least 5 characters long" }),
+    minimumOrderQuantity: z
+      .number()
+      .int()
+      .nonnegative({
+        message: "Minimum Order Quantity must be a non-negative integer",
+      }),
+
+    images: z
+      .array(z.string().url({ message: "Invalid image URL" }))
+      .min(1, { message: "At least one image is required" }),
+    thumbnail: z.string().url({ message: "Invalid thumbnail URL" }),
     isDeleted: z.boolean().optional(),
   }),
 });

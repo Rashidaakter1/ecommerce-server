@@ -3,11 +3,6 @@ import { TProduct } from "./product.interface";
 
 const productSchema = new Schema<TProduct>(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     title: {
       type: String,
       required: true,
@@ -80,7 +75,27 @@ const productSchema = new Schema<TProduct>(
       type: String,
       enum: ["instock", "outofstock", "lowstock"],
     },
-    reviews: Schema.Types.ObjectId,
+    // reviews: {
+    //   type: Schema.Types.ObjectId,
+    //   default: "",
+    // },
+    returnPolicy: {
+      type: String,
+      required: true,
+    },
+    minimumOrderQuantity: {
+      type: Number,
+      required: true,
+    },
+
+    images: {
+      type: [String],
+      required: true,
+    },
+    thumbnail: {
+      type: String,
+      required: true,
+    },
     isDeleted: { type: Boolean, default: false },
   },
   {

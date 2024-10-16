@@ -1,6 +1,5 @@
 import { Types } from "mongoose";
 
-
 // export type TReview ={
 //   rating: number;
 //   comment: string;
@@ -9,14 +8,12 @@ import { Types } from "mongoose";
 //   reviewerEmail: string;
 // }
 
-
-export type TDimensions ={
+export type TDimensions = {
   width: number;
   height: number;
   depth: number;
-}
+};
 export type TProduct = {
-  id: number;
   title: string;
   description: string;
   category: string;
@@ -32,6 +29,10 @@ export type TProduct = {
   warrantyInformation: string;
   shippingInformation: string;
   availabilityStatus: "instock" | "outofstock" | "lowstock";
-  reviews: Types.ObjectId;
+  // reviews: Types.ObjectId;
+  returnPolicy: string;
+  minimumOrderQuantity: number;
+  images: string[];
+  thumbnail: string;
   isDeleted: boolean;
 };
