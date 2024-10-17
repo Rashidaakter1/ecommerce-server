@@ -25,26 +25,32 @@ const updateProductIntoDb = async (id: string, payload: TProduct) => {
   if (!isProductExist) {
     throw new AppError(httpStatus.NOT_FOUND, " Product not found");
   }
-  // const { cameraQuality, additionalFeatures, ...remainingData } = payload;
-  // const modifiedUpdatedData: Record<string, unknown> = {
-  //   ...remainingData,
-  // };
+  const { dimensions, tags, images, ...remainingData } = payload;
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingData,
+  };
 
-  // if (cameraQuality && Object.keys(cameraQuality).length) {
-  //   for (const [key, value] of Object.entries(cameraQuality)) {
-  //     modifiedUpdatedData[`cameraQuality.${key}`] = value;
-  //   }
-  // }
-  // if (additionalFeatures && Object.keys(additionalFeatures).length) {
-  //   for (const [key, value] of Object.entries(additionalFeatures)) {
-  //     modifiedUpdatedData[`additionalFeatures.${key}`] = value;
-  //   }
-  // }
 
-  // const result = await Product.findByIdAndUpdate(id, modifiedUpdatedData, {
-  //   new: true,
-  // });
-  return null;
+  if (dimensions && Object.keys(dimensions).length) {
+    for (const [key, value] of Object.entries(dimensions)) {
+      modifiedUpdatedData[`dimensions.${key}`] = value;
+    }
+  }
+   if (tags && Array.isArray(tags)) {
+     await Product.findByIdAndUpdate(id, {
+       $addToSet: { tags: { $each: tags } },
+     });
+   }
+   if (images && Array.isArray(images)) {
+     await Product.findByIdAndUpdate(id, {
+       $addToSet: { images: { $each: images } },
+     });
+   }
+  const result = await Product.findByIdAndUpdate(id, modifiedUpdatedData, {
+    new: true,
+  });
+
+  return result;
 };
 
 const deleteProductFromDb = async (id: string) => {
