@@ -9,13 +9,29 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000", 
+      "https://e-commerce-kappa-mauve.vercel.app/", 
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, 
+  })
+);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.status(200).json({
+    success: true,
+    message: "Server is running",
+    data: null,
+  });
 });
 
 app.use("/api", router);
+
+app.options("*", cors());
 
 app.use(globalErrorHandler);
 app.use(notFound);
