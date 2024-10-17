@@ -83,6 +83,7 @@ const loginUserIntoDb = async (payload: Partial<TUser>) => {
   const jwtPayload = {
     email: isEmailExist.email,
     name: isEmailExist.name.firstName,
+    role: isEmailExist.role,
   };
 
   const accessToken = createToken(
@@ -142,6 +143,7 @@ const refreshTokenIntoDB = async (token: string) => {
   const jwtPayload = {
     email: isUserExist.email,
     name: isUserExist.name.firstName,
+    role: isUserExist.role,
   };
 
   const accessToken = createToken(

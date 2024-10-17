@@ -3,6 +3,7 @@ import { AuthControllers } from "./auth.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { AuthValidations } from "./auth.validation";
 import auth from "../../middlewares/auth";
+import { USER_ROLE } from "./auth.constant";
 
 const router = express.Router();
 
@@ -42,6 +43,6 @@ router.post(
   validateRequest(AuthValidations.resetPasswordValidation),
   AuthControllers.resetPassword
 );
-router.get("/users", auth(), AuthControllers.getUser);
+router.get("/users", auth(USER_ROLE.admin), AuthControllers.getUser);
 
 export const AuthRoutes = router;

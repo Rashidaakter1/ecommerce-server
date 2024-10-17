@@ -5,9 +5,12 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { User } from "../modules/auth/auth.model";
-const auth = () => {
+import { TUserRole } from "../modules/auth/auth.interface";
+
+const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
+    console.log(token);
     if (!token) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
     }
@@ -22,7 +25,8 @@ const auth = () => {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
     }
 
-    const { email, iat } = decoded;
+    console.log(decoded);
+    const { email, iat, role } = decoded;
 
     // check if the user is authenticated
 
@@ -44,6 +48,11 @@ const auth = () => {
         iat as number
       )
     ) {
+      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
+    }
+
+    //Check the roles
+    if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
     }
     req.user = decoded as JwtPayload;

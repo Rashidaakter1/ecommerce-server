@@ -1,13 +1,5 @@
 import { Types } from "mongoose";
 
-// export type TReview ={
-//   rating: number;
-//   comment: string;
-//   date: Date;
-//   reviewerName: string;
-//   reviewerEmail: string;
-// }
-
 export type TDimensions = {
   width: number;
   height: number;
@@ -29,7 +21,7 @@ export type TProduct = {
   warrantyInformation: string;
   shippingInformation: string;
   availabilityStatus: "instock" | "outofstock" | "lowstock";
-  // reviews: Types.ObjectId;
+  reviews: Types.ObjectId;
   returnPolicy: string;
   minimumOrderQuantity: number;
   images: string[];

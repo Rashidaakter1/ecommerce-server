@@ -1,6 +1,12 @@
 import { Model } from "mongoose";
+import { USER_ROLE } from "./auth.constant";
 
-export interface TUser  {
+export type TPasswordHistory = {
+  password: string;
+  createdAt: Date;
+};
+
+export interface TUser {
   email: string;
   password: string;
   name: {
@@ -8,10 +14,15 @@ export interface TUser  {
     lastName: string;
   };
   contactNo: number;
+  role: "admin" | "user";
   isDeleted: boolean;
   passwordChangedAt: Date;
-};
+}
 
+export type TLoginUser = {
+  username: string;
+  password: string;
+};
 
 export interface UserModel extends Model<TUser> {
   isJWTIssuedBBeforePasswordChange(
@@ -19,3 +30,5 @@ export interface UserModel extends Model<TUser> {
     iat: number
   ): boolean;
 }
+
+export type TUserRole = keyof typeof USER_ROLE;
