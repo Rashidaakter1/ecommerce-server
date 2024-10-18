@@ -68,8 +68,11 @@ const productSchema = new Schema<TProduct>(
       required: true,
     },
     shippingInformation: {
-      type: String,
-      required: true,
+      street: { type: String },
+      city: { type: String },
+      state: { type: String },
+      postalCode: { type: String },
+      country: { type: String },
     },
     availabilityStatus: {
       type: String,
@@ -77,7 +80,7 @@ const productSchema = new Schema<TProduct>(
     },
     reviews: {
       type: Schema.Types.ObjectId,
-      ref:"Reviews",
+      ref: "Reviews",
       default: "",
     },
     returnPolicy: {

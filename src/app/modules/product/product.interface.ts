@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { TShippingAddress } from "../order/order.interface";
 
 export type TDimensions = {
   width: number;
@@ -19,7 +20,7 @@ export type TProduct = {
   weight: number;
   dimensions: TDimensions;
   warrantyInformation: string;
-  shippingInformation: string;
+  shippingInformation: TShippingAddress;
   availabilityStatus: "instock" | "outofstock" | "lowstock";
   reviews: Types.ObjectId;
   returnPolicy: string;

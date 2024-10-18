@@ -50,19 +50,20 @@ const createProductValidation = z.object({
     warrantyInformation: z.string().min(5, {
       message: "Warranty Information must be at least 5 characters long",
     }),
-    shippingInformation: z.string().min(5, {
-      message: "Shipping Information must be at least 5 characters long",
+    shippingInformation: z.object({
+      street: z.string(),
+      city: z.string(),
+      state: z.string(),
+      postalCode: z.string(),
+      country: z.string(),
     }),
     availabilityStatus: z.enum(["instock", "outofstock", "lowstock"]),
     returnPolicy: z
       .string()
       .min(5, { message: "Return Policy must be at least 5 characters long" }),
-    minimumOrderQuantity: z
-      .number()
-      .int()
-      .nonnegative({
-        message: "Minimum Order Quantity must be a non-negative integer",
-      }),
+    minimumOrderQuantity: z.number().int().nonnegative({
+      message: "Minimum Order Quantity must be a non-negative integer",
+    }),
 
     images: z
       .array(z.string().url({ message: "Invalid image URL" }))
