@@ -1,22 +1,23 @@
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
-import { CategoryServices } from "./category.service";
+
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
+import { ShoppingCartServices } from "./cart.service";
 
-const createCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await CategoryServices.createCategoryIntoDb(req.user,req.body);
+const createShoppingCart = catchAsync(async (req: Request, res: Response) => {
+  const result = await ShoppingCartServices.createShoppingCartIntoDb(req.user,req.body);
 
   sendResponse(res, {
     success: true,
     statusCode: 201,
-    message: "Category created successfully!",
+    message: "ShoppingCart created successfully!",
     data: result,
   });
 });
 
-const getCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await CategoryServices.getCategoryFromDb(req.query);
+const getShoppingCart = catchAsync(async (req: Request, res: Response) => {
+  const result = await ShoppingCartServices.geTShoppingCartFromDb(req.query);
 
   sendResponse(res, {
     success: true,
@@ -26,49 +27,49 @@ const getCategory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getSingleCategory = catchAsync(async (req: Request, res: Response) => {
-  const categoryId = req.params.categoryId;
-  const result = await CategoryServices.getSingleCategoryFromDb(categoryId);
+const getSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
+  const ShoppingCartId = req.params.ShoppingCartId;
+  const result = await ShoppingCartServices.getSingleShoppingCartFromDb(ShoppingCartId);
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Category is retrieved successfully!",
+    message: "ShoppingCart is retrieved successfully!",
     data: result,
   });
 });
 
-const updateSingleCategory = catchAsync(async (req: Request, res: Response) => {
-  const categoryId = req.params.categoryId;
-  const result = await CategoryServices.updateCategoryFromDb(
-    categoryId,
+const updateSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
+  const ShoppingCartId = req.params.ShoppingCartId;
+  const result = await ShoppingCartServices.updateShoppingCartFromDb(
+    ShoppingCartId,
     req.body
   );
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Category is updated successfully!",
+    message: "ShoppingCart is updated successfully!",
     data: result,
   });
 });
 
-const deleteSingleCategory = catchAsync(async (req: Request, res: Response) => {
-  const categoryId = req.params.categoryId;
-  const result = await CategoryServices.deleteCategoryFromDb(categoryId);
+const deleteSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
+  const ShoppingCartId = req.params.ShoppingCartId;
+  const result = await ShoppingCartServices.deleteShoppingCartFromDb(ShoppingCartId);
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Category is deleted successfully!",
+    message: "ShoppingCart is deleted successfully!",
     data: result,
   });
 });
 
-export const CategoryControllers = {
-  createCategory,
-  getCategory,
-  getSingleCategory,
-  updateSingleCategory,
-  deleteSingleCategory,
+export const ShoppingCartControllers = {
+  createShoppingCart,
+  getShoppingCart,
+  getSingleShoppingCart,
+  updateSingleShoppingCart,
+  deleteSingleShoppingCart,
 };

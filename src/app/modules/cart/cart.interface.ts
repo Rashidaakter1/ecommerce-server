@@ -1,12 +1,16 @@
 import { Types } from "mongoose";
 
-export type TCategory = {
-  categoryId: string;
-  name: string;
 
-  isDeleted: boolean;
-  products: Types.ObjectId;
-  createdBy: Types.ObjectId;
-};
+
+export type TShoppingCart ={
+  user: Types.ObjectId;
+  products: {
+    product: Types.ObjectId;
+    quantity: number;
+  }[];
+  totalItems: number;
+  totalPrice: number;
+  updatedAt?: Date;
+}
 
 

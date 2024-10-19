@@ -1,17 +1,18 @@
 import { JwtPayload } from "jsonwebtoken";
 import QueryBuilder from "../../builder/QueryBuilder";
-import { TCategory } from "./category.interface";
-import { Category } from "./category.model";
+
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
+import { TShoppingCart } from "./cart.interface";
+import { ShoppingCart } from "./cart.model";
 
-const createCategoryIntoDb = async (user: JwtPayload, payload: TCategory) => {
-  const category = await Category.create({ ...payload, createdBy: user._id });
-  return category;
+const createShoppingCartIntoDb = async (user: JwtPayload, payload: TShoppingCart) => {
+  const cart = await ShoppingCart.create({ ...payload, createdBy: user._id });
+  return ShoppingCart;
 };
-const getCategoryFromDb = async (query: Record<string, unknown>) => {
-  const queryCategory = new QueryBuilder(
-    Category.find()
+const geTShoppingCartFromDb = async (query: Record<string, unknown>) => {
+  const queryShoppingCart = new QueryBuilder(
+    ShoppingCart.find()
       .select("-isDeleted")
       .populate("createdBy", { _id: 1, username: 1, email: 1, role: 1 }),
     query
@@ -21,52 +22,52 @@ const getCategoryFromDb = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
-  const result = await queryCategory.modelQuery;
+  const result = await queryShoppingCart.modelQuery;
   return result;
 };
-const getSingleCategoryFromDb = async (id: string) => {
-  const isCategoryExists = await Category.findById(id);
-  if (!isCategoryExists) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Category is  not found");
+const getSingleShoppingCartFromDb = async (id: string) => {
+  const isShoppingCartExists = await ShoppingCart.findById(id);
+  if (!isShoppingCartExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "ShoppingCart is  not found");
   }
-  const category = await Category.findById(id)
+  const shoppingCart = await ShoppingCart.findById(id)
     .where({
       isDeleted: { $ne: true },
     })
     .populate("createdBy", { _id: 1, username: 1, email: 1, role: 1 });
-  return category;
+  return ShoppingCart;
 };
-const updateCategoryFromDb = async (
+const updateShoppingCartFromDb = async (
   id: string,
-  payload: Partial<TCategory>
+  payload: Partial<TShoppingCart>
 ) => {
-  const isCategoryExists = await Category.findById(id);
-  if (!isCategoryExists) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Category is  not found");
+  const isShoppingCartExists = await ShoppingCart.findById(id);
+  if (!isShoppingCartExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "ShoppingCart is  not found");
   }
-  const category = await Category.findByIdAndUpdate(id, payload, { new: true });
-  return category;
+  const shoppingCart = await ShoppingCart.findByIdAndUpdate(id, payload, { new: true });
+  return ShoppingCart;
 };
 
-const deleteCategoryFromDb = async (id: string) => {
-  const isCategoryExists = await Category.findById(id);
-  if (!isCategoryExists) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Category is  not found");
+const deleteShoppingCartFromDb = async (id: string) => {
+  const isShoppingCartExists = await ShoppingCart.findById(id);
+  if (!isShoppingCartExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "ShoppingCart is  not found");
   }
-  const category = await Category.findByIdAndUpdate(
+  const shoppingCart = await ShoppingCart.findByIdAndUpdate(
     id,
     {
       $set: { isDeleted: true },
     },
     { new: true }
   );
-  return category;
+  return ShoppingCart;
 };
 
-export const CategoryServices = {
-  createCategoryIntoDb,
-  getCategoryFromDb,
-  getSingleCategoryFromDb,
-  updateCategoryFromDb,
-  deleteCategoryFromDb,
+export const ShoppingCartServices = {
+  createShoppingCartIntoDb,
+  geTShoppingCartFromDb,
+  getSingleShoppingCartFromDb,
+  updateShoppingCartFromDb,
+  deleteShoppingCartFromDb,
 };

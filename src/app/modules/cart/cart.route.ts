@@ -1,39 +1,37 @@
 import express from "express";
-import { CategoryControllers } from "./category.controller";
-
-import { categoryValidationSchema } from "./category.validation";
-
 import { USER_ROLE } from "../auth/auth.constant";
 import validateRequest from "../../middlewares/validateRequest";
 import auth from "../../middlewares/auth";
+import { ShoppingCartValidationSchema } from "./cart.validation";
+import { ShoppingCartControllers } from "./cart.controller";
 
 const router = express.Router();
 
 router.post(
   "/",
   auth(USER_ROLE.admin),
-  validateRequest(categoryValidationSchema.createCategoryValidationSchema),
-  CategoryControllers.createCategory
+  validateRequest(ShoppingCartValidationSchema.createShoppingCartValidationSchema),
+  ShoppingCartControllers.createShoppingCart
 );
 router.get(
   "/",
   auth(USER_ROLE.admin, USER_ROLE.user),
-  CategoryControllers.getCategory
+  ShoppingCartControllers.getShoppingCart
 );
 router.get(
-  "/:categoryId",
+  "/:ShoppingCartId",
   auth(USER_ROLE.admin),
-  CategoryControllers.getSingleCategory
+  ShoppingCartControllers.getSingleShoppingCart
 );
 router.put(
-  "/:categoryId",
+  "/:ShoppingCartId",
   auth(USER_ROLE.admin),
-  CategoryControllers.updateSingleCategory
+  ShoppingCartControllers.updateSingleShoppingCart
 );
 router.delete(
-  "/:categoryId",
+  "/:ShoppingCartId",
   auth(USER_ROLE.admin),
-  CategoryControllers.deleteSingleCategory
+  ShoppingCartControllers.deleteSingleShoppingCart
 );
 
-export const CategoryRoutes = router;
+export const ShoppingCartRoutes = router;

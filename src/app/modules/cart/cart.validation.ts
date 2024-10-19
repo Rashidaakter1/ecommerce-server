@@ -1,17 +1,22 @@
 import z from "zod";
 
-const createCategoryValidationSchema = z.object({
+const createShoppingCartValidationSchema = z.object({
   body: z.object({
-    categoryId: z.string(),
-    name: z.string(),
-    products: z.string(),
-    isDeleted: z.boolean().optional().default(false),
-    createdBy: z.string().optional(),
+    user: z.string(),
+    products: z.array(
+      z.object({
+        product: z.string(),
+        quantity: z.number().int().positive(), 
+      })
+    ),
+    totalItems: z.number().int().nonnegative().optional(), 
+    totalPrice: z.number().nonnegative().optional(), 
+    updatedAt: z.date().optional(), 
   }),
 });
-const updateCategoryValidationSchema = z.object({
+const updateShoppingCartValidationSchema = z.object({
   body: z.object({
-    categoryId: z.string().optional(),
+    ShoppingCartId: z.string().optional(),
     name: z.string().optional(),
     products: z.string().optional(),
     isDeleted: z.boolean().optional().default(false),
@@ -19,7 +24,7 @@ const updateCategoryValidationSchema = z.object({
   }),
 });
 
-export const categoryValidationSchema = {
-  createCategoryValidationSchema,
-  updateCategoryValidationSchema,
+export const ShoppingCartValidationSchema = {
+  createShoppingCartValidationSchema,
+  updateShoppingCartValidationSchema,
 };

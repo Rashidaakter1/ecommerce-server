@@ -1,20 +1,33 @@
 import { model, Schema } from "mongoose";
-import { TCategory } from "./category.interface";
+import { TShoppingCart } from "./cart.interface";
 
-const categorySchema = new Schema<TCategory>({
-  categoryId: { type: String, required: true, unique: true },
-  name: { type: String, required: true, unique: true },
-
-  products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
-  isDeleted: { type: Boolean, default: false },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+const shoppingCartSchema = new Schema<TShoppingCart>(
+  {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    products: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: { type: Number, required: true },
+      },
+    ],
+    totalItems: { type: Number, default: 0 },
+    totalPrice: { type: Number, default: 0 },
+    updatedAt: { type: Date, default: Date.now },
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
-categorySchema.pre("find", async function (next) {
+shoppingCartSchema.pre("find", async function (next) {
   this.where({ isDeleted: { $ne: true } });
   next();
 });
-export const Category = model<TCategory>("Category", categorySchema);
+export const ShoppingCart = model<TShoppingCart>(
+  "ShoppingCart",
+  shoppingCartSchema
+);
