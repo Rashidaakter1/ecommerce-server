@@ -9,8 +9,10 @@ const router = express.Router();
 
 router.post(
   "/",
-  auth(USER_ROLE.admin),
-  validateRequest(ShoppingCartValidationSchema.createShoppingCartValidationSchema),
+  auth(USER_ROLE.user),
+  validateRequest(
+    ShoppingCartValidationSchema.createShoppingCartValidationSchema
+  ),
   ShoppingCartControllers.createShoppingCart
 );
 router.get(
@@ -19,18 +21,18 @@ router.get(
   ShoppingCartControllers.getShoppingCart
 );
 router.get(
-  "/:ShoppingCartId",
-  auth(USER_ROLE.admin),
+  "/:cartId",
+  auth(USER_ROLE.admin, USER_ROLE.user),
   ShoppingCartControllers.getSingleShoppingCart
 );
 router.put(
-  "/:ShoppingCartId",
-  auth(USER_ROLE.admin),
+  "/:cartId",
+  auth(USER_ROLE.admin, USER_ROLE.user),
   ShoppingCartControllers.updateSingleShoppingCart
 );
 router.delete(
-  "/:ShoppingCartId",
-  auth(USER_ROLE.admin),
+  "/:cartId",
+  auth(USER_ROLE.admin, USER_ROLE.user),
   ShoppingCartControllers.deleteSingleShoppingCart
 );
 

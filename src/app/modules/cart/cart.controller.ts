@@ -28,7 +28,7 @@ const getShoppingCart = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const ShoppingCartId = req.params.ShoppingCartId;
+  const ShoppingCartId = req.params.cartId;
   const result = await ShoppingCartServices.getSingleShoppingCartFromDb(ShoppingCartId);
 
   sendResponse(res, {
@@ -40,7 +40,7 @@ const getSingleShoppingCart = catchAsync(async (req: Request, res: Response) => 
 });
 
 const updateSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const ShoppingCartId = req.params.ShoppingCartId;
+  const ShoppingCartId = req.params.cartId;
   const result = await ShoppingCartServices.updateShoppingCartFromDb(
     ShoppingCartId,
     req.body
@@ -55,7 +55,7 @@ const updateSingleShoppingCart = catchAsync(async (req: Request, res: Response) 
 });
 
 const deleteSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const ShoppingCartId = req.params.ShoppingCartId;
+  const ShoppingCartId = req.params.cartId;
   const result = await ShoppingCartServices.deleteShoppingCartFromDb(ShoppingCartId);
 
   sendResponse(res, {

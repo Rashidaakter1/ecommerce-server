@@ -27,6 +27,7 @@ shoppingCartSchema.pre("find", async function (next) {
   this.where({ isDeleted: { $ne: true } });
   next();
 });
+
 export const ShoppingCart = model<TShoppingCart>(
   "ShoppingCart",
   shoppingCartSchema

@@ -2,7 +2,7 @@ import z from "zod";
 
 const createShoppingCartValidationSchema = z.object({
   body: z.object({
-    user: z.string(),
+ 
     products: z.array(
       z.object({
         product: z.string(),
@@ -11,7 +11,7 @@ const createShoppingCartValidationSchema = z.object({
     ),
     totalItems: z.number().int().nonnegative().optional(), 
     totalPrice: z.number().nonnegative().optional(), 
-    updatedAt: z.date().optional(), 
+  
   }),
 });
 const updateShoppingCartValidationSchema = z.object({
