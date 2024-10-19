@@ -11,7 +11,7 @@ import { USER_ROLE } from "../auth/auth.constant";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/create-review",
   auth(USER_ROLE.user),
   validateRequest(ReviewsValidations.createReviewsValidation),
   ReviewsControllers.createReviews

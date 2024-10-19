@@ -3,21 +3,50 @@ import { TProduct } from "./product.interface";
 import { Product } from "./product.model";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
+import mongoose from "mongoose";
 
 const createProductIntoDb = async (payload: TProduct) => {
   const result = await Product.create(payload);
   return result;
 };
 const getProductFromDb = async () => {
-  const result = await Product.find();
+  const result = await Product.aggregate([
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "productId",
+        as: "reviews",
+      },
+    },
+  ]);
   return result;
 };
+
 const getSingleProductFromDb = async (id: string) => {
-  const result = await Product.findById(id, { isDeleted: false });
-  if (!result) {
-    throw new AppError(httpStatus.NOT_FOUND, " Product not found");
+  const result = await Product.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(id),
+        isDeleted: false,
+      },
+    },
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "productId",
+        as: "reviews",
+      },
+    },
+  ]);
+
+  console.log(result);
+  if (result.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, "Product not found");
   }
-  return result;
+
+  return result[0];
 };
 
 const updateProductIntoDb = async (id: string, payload: TProduct) => {
@@ -30,22 +59,21 @@ const updateProductIntoDb = async (id: string, payload: TProduct) => {
     ...remainingData,
   };
 
-
   if (dimensions && Object.keys(dimensions).length) {
     for (const [key, value] of Object.entries(dimensions)) {
       modifiedUpdatedData[`dimensions.${key}`] = value;
     }
   }
-   if (tags && Array.isArray(tags)) {
-     await Product.findByIdAndUpdate(id, {
-       $addToSet: { tags: { $each: tags } },
-     });
-   }
-   if (images && Array.isArray(images)) {
-     await Product.findByIdAndUpdate(id, {
-       $addToSet: { images: { $each: images } },
-     });
-   }
+  if (tags && Array.isArray(tags)) {
+    await Product.findByIdAndUpdate(id, {
+      $addToSet: { tags: { $each: tags } },
+    });
+  }
+  if (images && Array.isArray(images)) {
+    await Product.findByIdAndUpdate(id, {
+      $addToSet: { images: { $each: images } },
+    });
+  }
   const result = await Product.findByIdAndUpdate(id, modifiedUpdatedData, {
     new: true,
   });

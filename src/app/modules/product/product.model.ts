@@ -78,11 +78,12 @@ const productSchema = new Schema<TProduct>(
       type: String,
       enum: ["instock", "outofstock", "lowstock"],
     },
-    reviews: {
-      type: Schema.Types.ObjectId,
-      ref: "Reviews",
-      default: "",
-    },
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Reviews",
+      },
+    ],
     returnPolicy: {
       type: String,
       required: true,

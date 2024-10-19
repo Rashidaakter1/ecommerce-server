@@ -11,19 +11,9 @@ const ReviewsSchema = new Schema<TReviews>(
     comment: { type: String, required: true },
     date: { type: Date, required: true },
     isDeleted: { type: Boolean, default: false },
-    // createdBy: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "User",
-    // },
     createdBy: {
-      reviewerName: {
-        type: String,
-        required: true,
-      },
-      reviewerEmail: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {

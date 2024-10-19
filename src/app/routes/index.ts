@@ -19,7 +19,7 @@ const moduleRoutes = [
     route: CategoryRoutes,
   },
   {
-    path: "/reviews",
+    path: "/review",
     route: ReviewsRoutes,
   },
   {

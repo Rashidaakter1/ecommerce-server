@@ -6,11 +6,5 @@ export type TReviews = {
   comment: string;
   date: Date;
   isDeleted: boolean;
-
-  // createdBy: Types.ObjectId;
-  createdBy: {
-    equals(arg0: Types.ObjectId): unknown;
-    reviewerName: string;
-    reviewerEmail: string;
-  };
+  createdBy: Types.ObjectId;
 };

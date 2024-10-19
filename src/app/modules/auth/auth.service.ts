@@ -16,15 +16,11 @@ const createUserIntoDb = async (payload: TUser) => {
   if (isEmailExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "Email already exists");
   }
-  // hashed password
-  const hashedPassword = await bcrypt.hash(
-    password,
-    Number(config.bcrypt__saltRound)
-  );
+
   const user = {
     ...remainingData,
     email,
-    password: hashedPassword,
+    password,
   };
   const result = await User.create(user);
 
@@ -70,11 +66,12 @@ const loginUserIntoDb = async (payload: Partial<TUser>) => {
   }
   // check the password is matches the password
   const hashedPassword = isEmailExist.password;
+  console.log(hashedPassword);
   const validPassword = await bcrypt.compare(
     password as string,
     hashedPassword
   );
-  console.log(validPassword);
+  console.log(validPassword, "valid password");
   if (!validPassword) {
     throw new AppError(httpStatus.FORBIDDEN, "Password is not match");
   }
