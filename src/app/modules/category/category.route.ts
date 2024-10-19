@@ -1,8 +1,6 @@
 import express from "express";
 import { CategoryControllers } from "./category.controller";
-
 import { categoryValidationSchema } from "./category.validation";
-
 import { USER_ROLE } from "../auth/auth.constant";
 import validateRequest from "../../middlewares/validateRequest";
 import auth from "../../middlewares/auth";
@@ -10,7 +8,7 @@ import auth from "../../middlewares/auth";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/create-category",
   auth(USER_ROLE.admin),
   validateRequest(categoryValidationSchema.createCategoryValidationSchema),
   CategoryControllers.createCategory

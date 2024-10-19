@@ -4,7 +4,7 @@ const createCategoryValidationSchema = z.object({
   body: z.object({
     categoryId: z.string(),
     name: z.string(),
-    products: z.string(),
+    products: z.array(z.string()),
     isDeleted: z.boolean().optional().default(false),
     createdBy: z.string().optional(),
   }),

@@ -4,16 +4,19 @@ import { TCategory } from "./category.interface";
 import { Category } from "./category.model";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
+import { User } from "../auth/auth.model";
 
 const createCategoryIntoDb = async (user: JwtPayload, payload: TCategory) => {
-  const category = await Category.create({ ...payload, createdBy: user._id });
+  console.log(user);
+  const userId = await User.findOne({ email: user.email });
+  const category = await Category.create({ ...payload, createdBy: userId });
   return category;
 };
 const getCategoryFromDb = async (query: Record<string, unknown>) => {
   const queryCategory = new QueryBuilder(
     Category.find()
       .select("-isDeleted")
-      .populate("createdBy", { _id: 1, username: 1, email: 1, role: 1 }),
+      .populate("createdBy products", { name: 1, title: 1 }),
     query
   )
     .search(["name"])
@@ -33,7 +36,7 @@ const getSingleCategoryFromDb = async (id: string) => {
     .where({
       isDeleted: { $ne: true },
     })
-    .populate("createdBy", { _id: 1, username: 1, email: 1, role: 1 });
+    .populate("createdBy products", { name: 1, title: 1 });
   return category;
 };
 const updateCategoryFromDb = async (
@@ -44,7 +47,22 @@ const updateCategoryFromDb = async (
   if (!isCategoryExists) {
     throw new AppError(httpStatus.BAD_REQUEST, "Category is  not found");
   }
-  const category = await Category.findByIdAndUpdate(id, payload, { new: true });
+
+  const { products, ...remainingData } = payload;
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingData,
+  };
+
+  if (products && Array.isArray(products)) {
+    await Category.findByIdAndUpdate(id, {
+      $addToSet: { products: { $each: products } },
+    });
+  }
+
+  const category = await Category.findByIdAndUpdate(id, modifiedUpdatedData, {
+    new: true,
+  });
+
   return category;
 };
 
