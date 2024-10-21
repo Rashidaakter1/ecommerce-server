@@ -10,7 +10,6 @@ const createOrderValidationSchema = z.object({
       z.object({
         product: z.string(),
         quantity: z.number().positive(),
-        priceAtPurchase: z.number().positive(),
       })
     ),
     totalAmount: z.number().positive(),

@@ -5,9 +5,11 @@ import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
 import { TOrder } from "./order.interface";
 import { Order } from "./order.model";
+import { User } from "../auth/auth.model";
 
 const createOrderIntoDb = async (user: JwtPayload, payload: TOrder) => {
-  const order = await Order.create({ ...payload, createdBy: user._id });
+  const userId = await User.findOne({ email: user.email });
+  const order = await Order.create({ ...payload, createdBy: userId });
   return order;
 };
 
@@ -36,7 +38,7 @@ const getSingleOrderFromDb = async (id: string) => {
       isDeleted: { $ne: true },
     })
     .populate("createdBy", { _id: 1, username: 1, email: 1, role: 1 });
-  return Order;
+  return order;
 };
 const updateOrderFromDb = async (id: string, payload: Partial<TOrder>) => {
   const isOrderExists = await Order.findById(id);
@@ -44,7 +46,7 @@ const updateOrderFromDb = async (id: string, payload: Partial<TOrder>) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Order is  not found");
   }
   const order = await Order.findByIdAndUpdate(id, payload, { new: true });
-  return Order;
+  return order;
 };
 
 const deleteOrderFromDb = async (id: string) => {
@@ -59,7 +61,7 @@ const deleteOrderFromDb = async (id: string) => {
     },
     { new: true }
   );
-  return Order;
+  return order;
 };
 
 export const orderServices = {

@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 export type TOrderProduct = {
   productId: Types.ObjectId;
   quantity: number;
-  priceAtPurchase: number;
+  totalPrice: number;
 };
 
 export type TShippingAddress = {
