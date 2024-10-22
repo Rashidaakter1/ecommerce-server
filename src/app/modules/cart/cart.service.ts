@@ -75,20 +75,63 @@ const getSingleShoppingCartFromDb = async (id: string) => {
     .populate("user", { _id: 1, name: 1, email: 1, role: 1 });
   return shoppingCart;
 };
-const getSingleUserCartFromDb = async (user: JwtPayload) => {
-  const cart = await ShoppingCart.find()
-    .where({
-      isDeleted: { $ne: true },
-    })
-    .populate("user", { _id: 1, name: 1, email: 1, role: 1 });
-  const userCart = cart.filter((data: any) => data?.user?.email === user.email);
-  const totalItems = userCart.reduce((acc, cart) => acc + cart.totalItems, 0);
-  const totalPrice = userCart.reduce((acc, cart) => acc + cart.totalPrice, 0);
-  return {
-    carts: userCart,
-    totalItems,
-    totalPrice,
-  };
+const getSingleUserCartFromDb = async (userData: JwtPayload) => {
+  const shoppingCart = await ShoppingCart.aggregate([
+    {
+      $match: {
+        isDeleted: { $ne: true },
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+    {
+      $match: {
+        "userDetails.email": userData.email,
+      },
+    },
+    {
+      $unwind: "$products",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "products.product",
+        foreignField: "_id",
+        as: "productDetails",
+      },
+    },
+    {
+      $unwind: "$productDetails",
+    },
+    {
+      $group: {
+        _id: null,
+        products: { $push: "$productDetails" },
+        totalItems: { $sum: "$totalItems" },
+        totalPrice: { $sum: "$totalPrice" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        products: 1,
+        totalItems: 1,
+        totalPrice: 1,
+      },
+    },
+  ]);
+
+  console.log(shoppingCart);
+  return shoppingCart;
 };
 
 const updateShoppingCartFromDb = async (
