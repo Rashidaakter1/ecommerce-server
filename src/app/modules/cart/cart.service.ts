@@ -55,7 +55,7 @@ const geTShoppingCartFromDb = async (query: Record<string, unknown>) => {
       }),
     query
   )
-    .search(["name"])
+    .search(["name", "email"])
     .filter()
     .sort()
     .paginate()
@@ -74,6 +74,21 @@ const getSingleShoppingCartFromDb = async (id: string) => {
     })
     .populate("user", { _id: 1, name: 1, email: 1, role: 1 });
   return shoppingCart;
+};
+const getSingleUserCartFromDb = async (user: JwtPayload) => {
+  const cart = await ShoppingCart.find()
+    .where({
+      isDeleted: { $ne: true },
+    })
+    .populate("user", { _id: 1, name: 1, email: 1, role: 1 });
+  const userCart = cart.filter((data: any) => data?.user?.email === user.email);
+  const totalItems = userCart.reduce((acc, cart) => acc + cart.totalItems, 0);
+  const totalPrice = userCart.reduce((acc, cart) => acc + cart.totalPrice, 0);
+  return {
+    carts: userCart,
+    totalItems,
+    totalPrice,
+  };
 };
 
 const updateShoppingCartFromDb = async (
@@ -120,21 +135,19 @@ const updateShoppingCartFromDb = async (
     );
   }
 
-
   const result = await ShoppingCart.findByIdAndUpdate(
     id,
     {
-      ...modifiedUpdatedData, 
-      updatedAt: Date.now(), 
+      ...modifiedUpdatedData,
+      updatedAt: Date.now(),
     },
     {
-      new: true, 
+      new: true,
     }
   );
 
   return result;
 };
-
 
 const deleteShoppingCartFromDb = async (id: string) => {
   const isShoppingCartExists = await ShoppingCart.findById(id);
@@ -157,4 +170,5 @@ export const ShoppingCartServices = {
   getSingleShoppingCartFromDb,
   updateShoppingCartFromDb,
   deleteShoppingCartFromDb,
+  getSingleUserCartFromDb,
 };

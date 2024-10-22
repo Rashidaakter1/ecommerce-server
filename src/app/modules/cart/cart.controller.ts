@@ -6,7 +6,10 @@ import httpStatus from "http-status";
 import { ShoppingCartServices } from "./cart.service";
 
 const createShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const result = await ShoppingCartServices.createShoppingCartIntoDb(req.user,req.body);
+  const result = await ShoppingCartServices.createShoppingCartIntoDb(
+    req.user,
+    req.body
+  );
 
   sendResponse(res, {
     success: true,
@@ -27,44 +30,64 @@ const getShoppingCart = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const ShoppingCartId = req.params.cartId;
-  const result = await ShoppingCartServices.getSingleShoppingCartFromDb(ShoppingCartId);
+const getSingleShoppingCart = catchAsync(
+  async (req: Request, res: Response) => {
+    const ShoppingCartId = req.params.cartId;
+    const result = await ShoppingCartServices.getSingleShoppingCartFromDb(
+      ShoppingCartId
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "ShoppingCart is retrieved successfully!",
+      data: result,
+    });
+  }
+);
+const getSingleUserCart = catchAsync(async (req: Request, res: Response) => {
+  const result = await ShoppingCartServices.getSingleUserCartFromDb(req.user);
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "ShoppingCart is retrieved successfully!",
+    message: "users cart is retrieved successfully!",
     data: result,
   });
 });
 
-const updateSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const ShoppingCartId = req.params.cartId;
-  const result = await ShoppingCartServices.updateShoppingCartFromDb(
-    ShoppingCartId,
-    req.body
-  );
+const updateSingleShoppingCart = catchAsync(
+  async (req: Request, res: Response) => {
+    const ShoppingCartId = req.params.cartId;
+    const result = await ShoppingCartServices.updateShoppingCartFromDb(
+      ShoppingCartId,
+      req.body
+    );
 
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "ShoppingCart is updated successfully!",
-    data: result,
-  });
-});
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "ShoppingCart is updated successfully!",
+      data: result,
+    });
+  }
+);
 
-const deleteSingleShoppingCart = catchAsync(async (req: Request, res: Response) => {
-  const ShoppingCartId = req.params.cartId;
-  const result = await ShoppingCartServices.deleteShoppingCartFromDb(ShoppingCartId);
+const deleteSingleShoppingCart = catchAsync(
+  async (req: Request, res: Response) => {
+    const ShoppingCartId = req.params.cartId;
+    const result = await ShoppingCartServices.deleteShoppingCartFromDb(
+      ShoppingCartId
+    );
 
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "ShoppingCart is deleted successfully!",
-    data: result,
-  });
-});
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "ShoppingCart is deleted successfully!",
+      data: result,
+    });
+  }
+);
 
 export const ShoppingCartControllers = {
   createShoppingCart,
@@ -72,4 +95,5 @@ export const ShoppingCartControllers = {
   getSingleShoppingCart,
   updateSingleShoppingCart,
   deleteSingleShoppingCart,
+  getSingleUserCart,
 };

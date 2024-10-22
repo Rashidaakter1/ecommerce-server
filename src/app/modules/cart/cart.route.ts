@@ -21,6 +21,11 @@ router.get(
   ShoppingCartControllers.getShoppingCart
 );
 router.get(
+  "/user",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  ShoppingCartControllers.getSingleUserCart
+);
+router.get(
   "/:cartId",
   auth(USER_ROLE.admin, USER_ROLE.user),
   ShoppingCartControllers.getSingleShoppingCart
