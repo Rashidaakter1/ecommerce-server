@@ -7,6 +7,7 @@ import { TShoppingCart } from "./cart.interface";
 import { ShoppingCart } from "./cart.model";
 import { User } from "../auth/auth.model";
 import { Product } from "../product/product.model";
+import { ObjectId } from "mongodb";
 
 const createShoppingCartIntoDb = async (
   user: JwtPayload,
@@ -134,6 +135,65 @@ const getSingleUserCartFromDb = async (userData: JwtPayload) => {
   return shoppingCart;
 };
 
+const deleteProductFromUserFromCart = async (
+  userData: JwtPayload,
+  productId: string
+) => {
+  const updatedCart = await ShoppingCart.aggregate([
+    {
+      $match: {
+        isDeleted: { $ne: true },
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+
+    {
+      $project: {
+        products: {
+          $filter: {
+            input: "$products",
+            as: "product",
+            cond: { $ne: ["$$product.product", new ObjectId(productId)] },
+          },
+        },
+        totalItems: { $sum: "$products.quantity" },
+        totalPrice: {
+          $reduce: {
+            input: "$products",
+            initialValue: 0,
+            in: {
+              $add: [
+                "$$value",
+                { $multiply: ["$$this.quantity", "$$this.price"] },
+              ],
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  console.log(updatedCart);
+  if (!updatedCart.length) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "No cart found or product not in cart."
+    );
+  }
+
+  return updatedCart[0];
+};
+
 const updateShoppingCartFromDb = async (
   id: string,
   payload: Partial<TShoppingCart>
@@ -214,4 +274,5 @@ export const ShoppingCartServices = {
   updateShoppingCartFromDb,
   deleteShoppingCartFromDb,
   getSingleUserCartFromDb,
+  deleteProductFromUserFromCart,
 };

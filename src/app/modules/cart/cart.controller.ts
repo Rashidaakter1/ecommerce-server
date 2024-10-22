@@ -88,6 +88,23 @@ const deleteSingleShoppingCart = catchAsync(
     });
   }
 );
+const deleteSingleShoppingCartFromUser = catchAsync(
+  async (req: Request, res: Response) => {
+    const productId = req.params.productId;
+    console.log(productId);
+    const result = await ShoppingCartServices.deleteProductFromUserFromCart(
+      req.user,
+      productId
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "ShoppingCart is deleted successfully from user!",
+      data: result,
+    });
+  }
+);
 
 export const ShoppingCartControllers = {
   createShoppingCart,
@@ -96,4 +113,5 @@ export const ShoppingCartControllers = {
   updateSingleShoppingCart,
   deleteSingleShoppingCart,
   getSingleUserCart,
+  deleteSingleShoppingCartFromUser,
 };

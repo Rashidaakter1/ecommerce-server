@@ -40,5 +40,10 @@ router.delete(
   auth(USER_ROLE.admin, USER_ROLE.user),
   ShoppingCartControllers.deleteSingleShoppingCart
 );
+router.patch(
+  "/:productId",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  ShoppingCartControllers.deleteSingleShoppingCartFromUser
+);
 
 export const ShoppingCartRoutes = router;
