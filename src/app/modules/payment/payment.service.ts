@@ -17,9 +17,18 @@ const createPaymentIntoDb = async (user: JwtPayload, payload: TPayment) => {
     total_amount: payload.totalAmount,
     currency: "BDT",
     tran_id: txn,
-    success_url: "http://localhost:5000/api/success-payment",
-    fail_url: "http://localhost:5000/api/fail",
-    cancel_url: "http://localhost:5000/api/cancel",
+    success_url:
+      config.NODE_ENV === "development"
+        ? "http://localhost:5000/api/success-payment"
+        : "https://ecommerce-server-azure-three.vercel.app/api/success-payment",
+    fail_url:
+      config.NODE_ENV === "development"
+        ? "http://localhost:5000/api/fail"
+        : "https://ecommerce-server-azure-three.vercel.app/api/fail",
+    cancel_url:
+      config.NODE_ENV === "development"
+        ? "http://localhost:5000/api/cancel"
+        : "https://ecommerce-server-azure-three.vercel.app/api/cancel",
     cus_name: "Customer Name",
     cus_email: "cust@yahoo.com",
     cus_add1: "Dhaka",
