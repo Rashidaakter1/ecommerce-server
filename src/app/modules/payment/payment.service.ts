@@ -7,18 +7,19 @@ import { TPayment } from "./payment.interface";
 import { Payment } from "./payment.model";
 import axios from "axios";
 import { JwtPayload } from "jsonwebtoken";
+import config from "../../config";
 
 const createPaymentIntoDb = async (user: JwtPayload, payload: TPayment) => {
   const txn = new ObjectId().toString();
   const paymentData = {
-    store_id: "ebuy6719e32ab12b3",
-    store_passwd: "ebuy6719e32ab12b3@ssl",
+    store_id: config.ssl__store__id,
+    store_passwd: config.ssl__store__password,
     total_amount: payload.totalAmount,
     currency: "BDT",
     tran_id: txn,
     success_url: "http://localhost:5000/api/success-payment",
-    fail_url: "http://yoursite.com/fail.php",
-    cancel_url: "http://yoursite.com/cancel.php",
+    fail_url: "http://localhost:5000/api/fail",
+    cancel_url: "http://localhost:5000/api/cancel",
     cus_name: "Customer Name",
     cus_email: "cust@yahoo.com",
     cus_add1: "Dhaka",

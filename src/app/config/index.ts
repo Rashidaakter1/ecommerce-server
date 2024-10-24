@@ -14,4 +14,6 @@ export default {
   jwt__refresh__expires__in: process.env.JWT__REFRESH__EXPIRERS__IN,
   reset__ui__link: process.env.RESET__UI__LINK,
   super__admin__password: process.env.SUPER__ADMIN__PASSWORD,
+  ssl__store__id:process.env.SSL__STORE__ID,
+  ssl__store__password: process.env.SSL__STORE__PASSWORD,
 };

@@ -33,8 +33,14 @@ router.post("/success-payment", async (req, res) => {
       status: "Success",
     },
   };
-  const updateData = await Payment.updateOne(query, update);
-  res.redirect("http://localhost:3000/success");
+  await Payment.updateOne(query, update);
+  res.redirect("http://localhost:3000/payment/success");
+});
+router.post("/fail", async (req, res) => {
+  res.redirect("http://localhost:3000/payment/fail");
+});
+router.post("/cancel", async (req, res) => {
+  res.redirect("http://localhost:3000/payment/cancel");
 });
 
 router.get("/", PaymentControllers.getPayment);
