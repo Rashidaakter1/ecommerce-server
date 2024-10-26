@@ -65,6 +65,13 @@ const loginUser = catchAsync(async (req, res) => {
   const { accessToken, refreshToken } = result;
 
   // Set the token as a cookie
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 3600000,
+  });
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
