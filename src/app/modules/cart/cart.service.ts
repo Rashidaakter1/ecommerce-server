@@ -77,61 +77,76 @@ const getSingleShoppingCartFromDb = async (id: string) => {
   return shoppingCart;
 };
 const getSingleUserCartFromDb = async (userData: JwtPayload) => {
-  const shoppingCart = await ShoppingCart.aggregate([
-    {
-      $match: {
-        isDeleted: { $ne: true },
-      },
+const shoppingCart = await ShoppingCart.aggregate([
+  {
+    $match: {
+      isDeleted: { $ne: true },
     },
-    {
-      $lookup: {
-        from: "users",
-        localField: "user",
-        foreignField: "_id",
-        as: "userDetails",
-      },
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "user",
+      foreignField: "_id",
+      as: "userDetails",
     },
-    {
-      $unwind: "$userDetails",
+  },
+  {
+    $unwind: "$userDetails",
+  },
+  {
+    $match: {
+      "userDetails.email": userData.email,
     },
-    {
-      $match: {
-        "userDetails.email": userData.email,
-      },
+  },
+  {
+    $unwind: "$products",
+  },
+  {
+    $lookup: {
+      from: "products",
+      localField: "products.product",
+      foreignField: "_id",
+      as: "productDetails",
     },
-    {
-      $unwind: "$products",
+  },
+  {
+    $unwind: "$productDetails",
+  },
+  {
+    $group: {
+      _id: "$productDetails._id", 
+      product: { $first: "$productDetails" }, 
+      quantity: { $sum: "$products.quantity" }, 
+      totalPricePerProduct: {
+        $sum: { $multiply: ["$productDetails.price", "$products.quantity"] },
+      }, 
     },
-    {
-      $lookup: {
-        from: "products",
-        localField: "products.product",
-        foreignField: "_id",
-        as: "productDetails",
-      },
+  },
+  {
+    $addFields: {
+      "product.quantity": "$quantity", 
+      "product.totalPricePerProduct": "$totalPricePerProduct", 
     },
-    {
-      $unwind: "$productDetails",
+  },
+  {
+    $group: {
+      _id: null,
+      products: { $push: "$product" }, 
+      totalItems: { $sum: "$quantity" }, 
+      totalPrice: { $sum: "$totalPricePerProduct" }, 
     },
-    {
-      $group: {
-        _id: null,
-        products: { $push: "$productDetails" },
-        totalItems: { $sum: "$totalItems" },
-        totalPrice: { $sum: "$totalPrice" },
-      },
+  },
+  {
+    $project: {
+      _id: 0,
+      products: 1,
+      totalItems: 1,
+      totalPrice: 1,
     },
-    {
-      $project: {
-        _id: 0,
-        products: 1,
-        totalItems: 1,
-        totalPrice: 1,
-      },
-    },
-  ]);
+  },
+]);
 
-  console.log(shoppingCart);
   return shoppingCart;
 };
 
