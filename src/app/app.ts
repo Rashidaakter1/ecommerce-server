@@ -19,6 +19,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://e-commerce-kappa-mauve.vercel.app",
+      "https://resilient-lily-5a3d33.netlify.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
