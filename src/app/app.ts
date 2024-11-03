@@ -20,6 +20,7 @@ app.use(
       "http://localhost:3000",
       "https://e-commerce-kappa-mauve.vercel.app",
       "https://ebuy-ecom.netlify.app",
+      "https://ebuy-ecom.netlify.app/api/auth/session",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -34,7 +35,6 @@ app.get("/", (req: Request, res: Response) => {
     data: null,
   });
 });
-
 
 app.use("/api", router);
 
